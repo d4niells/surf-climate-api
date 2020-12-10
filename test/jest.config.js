@@ -1,6 +1,7 @@
-import * as path from 'path';
-const root = path.resolve(__dirname, '..');
-import rootConfig from `${root}/jest.config.js`;
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { resolve } = require('path');
+const root = resolve(__dirname, '..');
+const rootConfig = require(`${root}/jest.config.js`);
 
 module.exports = {
   ...rootConfig,

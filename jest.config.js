@@ -1,6 +1,6 @@
-import * as path from 'path';
-
-const root = path.resolve(__dirname);
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { resolve } = require('path');
+const root = resolve(__dirname);
 
 module.exports = {
   rootDir: root,
