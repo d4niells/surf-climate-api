@@ -13,6 +13,7 @@
     "lint": "eslint ./src ./test --ext .ts",
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*'",
+    "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*'",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:functional": "jest --projects ./test --runInBand"
   },
