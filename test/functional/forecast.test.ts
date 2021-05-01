@@ -5,7 +5,7 @@ describe('Beach forecast function tests', () => {
     expect(status).toBe(200);
     // toEqual: Used when you want to check that two objects have the same value
     // toBe: Checks that a value is what you expect. It uses Object.is to check strict equality.
-    expect(body).toBe([
+    expect(body).toEqual([
       {
         time: '2020-04-26T00:00:00+00:00',
         forecast: [
