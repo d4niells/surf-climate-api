@@ -35,16 +35,22 @@ export class StormGlass {
   constructor(protected request: AxiosStatic) {}
 
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
-    const response = await this.request.get<StormGlassForecastResponse>(
-      `https://api.stormglass.io/v2/weather/point?params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}&end=1592113802&lat=${lat}&lng=${lng}`,
-      {
-        headers: {
-          Authorization: 'token-here',
-        },
-      }
-    );
+    try {
+      const response = await this.request.get<StormGlassForecastResponse>(
+        `https://api.stormglass.io/v2/weather/point?params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}&end=1592113802&lat=${lat}&lng=${lng}`,
+        {
+          headers: {
+            Authorization: 'token-here',
+          },
+        }
+      );
 
-    return this.normalizeResponse(response.data);
+      return this.normalizeResponse(response.data);
+    } catch (err) {
+      throw new Error(
+        `Unexpected error when trying to communicate to StormGlass: ${err.message}`
+      );
+    }
   }
 
   private normalizeResponse(
