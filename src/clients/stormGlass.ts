@@ -1,6 +1,7 @@
 import config, { IConfig } from 'config';
-import { InternalError } from '@src/utils/errors/internal-error';
 import * as HTTPUtil from '@src/utils/request';
+import { ClientRequestError } from '@src/utils/errors/stormGlass-client-request-error';
+import { StormGlassReponseError } from '@src/utils/errors/stormGlass-response-error';
 
 export interface StormGlassPointSource {
   [key: string]: number;
@@ -28,22 +29,6 @@ export interface ForecastPoint {
   swellPeriod: number;
   windDirection: number;
   windSpeed: number;
-}
-
-export class ClientRequestError extends InternalError {
-  constructor(message: string) {
-    const internalMessage =
-      'Unexpected error when trying to communicate to StormGlass';
-    super(`${internalMessage}: ${message}`);
-  }
-}
-
-export class StormGlassReponseError extends InternalError {
-  constructor(message: string) {
-    const internalMessage =
-      'Unexpected error returned by the StormGlass service';
-    super(`${internalMessage}: ${message}`);
-  }
 }
 
 const stormGlassResourceConfig: IConfig = config.get(
