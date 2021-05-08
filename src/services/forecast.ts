@@ -1,4 +1,5 @@
 import { ForecastPoint, StormGlass } from '@src/clients/stormGlass';
+import { ForecastProcessingInternalError } from '@src/utils/errors/forecast-processing-internal-error';
 
 export enum BeachPosition {
   north = 'N',
@@ -28,25 +29,29 @@ export class Forecast {
   public async processForecastForBeaches(
     beaches: Beach[]
   ): Promise<TimeForecast[]> {
-    const pointsWithCorrectSource: BeachForecast[] = [];
+    try {
+      const pointsWithCorrectSource: BeachForecast[] = [];
 
-    for (const beach of beaches) {
-      const { lat, lng, name, position } = beach;
+      for (const beach of beaches) {
+        const { lat, lng, name, position } = beach;
 
-      const points = await this.stormGlass.fetchPoints(lat, lng);
-      const enrichedBeachData = points.map((point) => ({
-        ...point,
-        lat,
-        lng,
-        name,
-        position,
-        rating: 1,
-      }));
+        const points = await this.stormGlass.fetchPoints(lat, lng);
+        const enrichedBeachData = points.map((point) => ({
+          ...point,
+          lat,
+          lng,
+          name,
+          position,
+          rating: 1,
+        }));
 
-      pointsWithCorrectSource.push(...enrichedBeachData);
+        pointsWithCorrectSource.push(...enrichedBeachData);
+      }
+
+      return this.mapForecastByTime(pointsWithCorrectSource);
+    } catch (err) {
+      throw new ForecastProcessingInternalError(err.message);
     }
-
-    return this.mapForecastByTime(pointsWithCorrectSource);
   }
 
   private mapForecastByTime(forecast: BeachForecast[]): TimeForecast[] {
