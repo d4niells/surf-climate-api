@@ -35,4 +35,4 @@ const schema = new mongoose.Schema(
   }
 );
 
-export const Beach: Model<BeachModel> = mongoose.model('Beac', schema);
+export const Beach: Model<BeachModel> = mongoose.model('Beach', schema);
