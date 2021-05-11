@@ -9,11 +9,10 @@ export enum BeachPosition {
 }
 
 export interface Beach {
-  name: string;
-  position: BeachPosition;
   lat: number;
   lng: number;
-  user: string;
+  name: string;
+  position: BeachPosition;
 }
 
 export interface TimeForecast {
