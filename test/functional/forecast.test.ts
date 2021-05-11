@@ -41,6 +41,26 @@ describe('Beach forecast function tests', () => {
     expect(status).toBe(200);
     expect(body).toEqual(apiForecastResponse1BeachFixture);
   });
+
+  it('Should return status 500 if something goes wrong during the processing', async () => {
+    nock('https://api.stormglass.io:443', {
+      encodedQueryParams: true,
+      reqheaders: {
+        Authorization: (): boolean => true,
+      },
+    })
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .get('/v2/weather/point')
+      .query({
+        lat: '-33.792726',
+        lng: '151.289824',
+      })
+      .replyWithError('Something ent wrong');
+
+    const { status } = await global.testRequest.get('/forecast');
+
+    expect(status).toBe(500);
+  });
 });
 
 // toEqual: Used when you want to check that two objects have the same value
