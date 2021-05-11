@@ -1,12 +1,14 @@
+import './utils/module-alias';
+
 import express, { Application } from 'express';
 import { Server } from '@overnightjs/core';
+import config from 'config';
 import { ForecastController } from '@src/controllers/forecast';
+import { BeachesController } from '@src/controllers/beaches';
 import * as database from '@src/database';
-import './utils/module-alias';
-import { BeachesController } from './controllers/beaches';
 
 export class SetupServer extends Server {
-  constructor(private port = 3000) {
+  constructor(private port: number = config.get('App.port')) {
     super();
   }
 
@@ -30,6 +32,12 @@ export class SetupServer extends Server {
 
   private async databaseSetup(): Promise<void> {
     await database.connect();
+  }
+
+  public start(): void {
+    this.app.listen(this.port, () => {
+      console.info('Server listening of port: ', this.port);
+    });
   }
 
   public async close(): Promise<void> {
