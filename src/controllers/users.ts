@@ -6,8 +6,12 @@ import { User } from '@src/models/user';
 export class UsersController {
   @Post('')
   public async create(request: Request, response: Response): Promise<void> {
-    const user = new User(request.body);
-    const newUser = await user.save();
-    response.status(201).send(newUser);
+    try {
+      const user = new User(request.body);
+      const newUser = await user.save();
+      response.status(201).send(newUser);
+    } catch (error) {
+      response.status(400).send({ error: error.message });
+    }
   }
 }
