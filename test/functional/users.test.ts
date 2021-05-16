@@ -90,5 +90,21 @@ describe('Users function tests', () => {
 
       expect(response.status).toBe(401);
     });
+
+    it('Should return status 401 if the user is found but the password does not match', async () => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'john@mail.com',
+        password: '1234',
+      };
+
+      await new User(newUser).save();
+
+      const response = await global.testRequest
+        .post('/users/authenticate')
+        .send({ email: newUser.email, password: 'different password' });
+
+      expect(response.status).toBe(401);
+    });
   });
 });
