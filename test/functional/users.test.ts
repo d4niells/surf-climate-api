@@ -1,10 +1,11 @@
 import { User } from '@src/models/user';
+import { Auth } from '@src/services/auth';
 
 describe('Users function tests', () => {
   beforeEach(async () => await User.deleteMany({}));
 
   describe('When creating a new user', () => {
-    it('Should successfully create a new user', async () => {
+    it('Should successfully create a new user with encrypted password', async () => {
       const newUser = {
         name: 'John Doe',
         email: 'john@mail.com',
@@ -12,8 +13,21 @@ describe('Users function tests', () => {
       };
 
       const response = await global.testRequest.post('/users').send(newUser);
+
+      const passwordHasEncrypted = Auth.comparePasswords(
+        newUser.password,
+        response.body.password
+      );
+
+      expect(passwordHasEncrypted).resolves.toBeTruthy();
+
       expect(response.status).toBe(201);
-      expect(response.body).toEqual(expect.objectContaining(newUser));
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          ...newUser,
+          password: expect.any(String),
+        })
+      );
     });
 
     it('Should return status 422 when there is a validation error', async () => {
