@@ -21,12 +21,14 @@
   "dependencies": {
     "@overnightjs/core": "^1.7.5",
     "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
     "config": "^3.3.6",
     "express": "^4.17.1",
     "module-alias": "^2.2.2",
     "mongoose": "^5.12.7"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/config": "^0.0.38",
     "@types/express": "^4.17.9",
     "@types/jest": "^26.0.15",
