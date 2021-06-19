@@ -1,20 +1,40 @@
 import nock from 'nock';
+
 import { Beach, BeachPosition } from '@src/models/beaches';
+import { User } from '@src/models/user';
+
+import { Auth } from '@src/services/auth';
+
 import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_hours.json';
 import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json';
 
 describe('Beach forecast function tests', () => {
+  let token: string;
+
+  const defaultUser: User = {
+    name: 'John Doe',
+    email: 'john3@mail.com',
+    password: '1234',
+  };
+
   beforeEach(async () => {
     await Beach.deleteMany({});
+    await User.deleteMany({});
+
+    const user = await new User(defaultUser).save();
+
     const defaultBeach = {
       lat: -33.792726,
       lng: 151.289824,
       name: 'Manly',
+      user: user.id,
       position: BeachPosition.east,
     };
 
     const beach = new Beach(defaultBeach);
     await beach.save();
+
+    token = Auth.generateToken(user.toJSON());
   });
 
   it('Should return a forecast with just a few times', async () => {
@@ -30,13 +50,14 @@ describe('Beach forecast function tests', () => {
         params:
           'swellDirection%2CswellHeight%2CswellPeriod%2CwaveDirection%2CwaveHeight%2CwindDirection%2CwindSpeed',
         source: 'noaa',
-        end: '1592113802',
         lat: '-33.792726',
         lng: '151.289824',
       })
       .reply(200, stormGlassWeather3HoursFixture);
 
-    const { body, status } = await global.testRequest.get('/forecast');
+    const { body, status } = await global.testRequest
+      .get('/forecast')
+      .set({ 'x-access-token': token });
 
     expect(status).toBe(200);
     expect(body).toEqual(apiForecastResponse1BeachFixture);
@@ -57,7 +78,9 @@ describe('Beach forecast function tests', () => {
       })
       .replyWithError('Something ent wrong');
 
-    const { status } = await global.testRequest.get('/forecast');
+    const { status } = await global.testRequest
+      .get('/forecast')
+      .set({ 'x-access-token': token });
 
     expect(status).toBe(500);
   });
