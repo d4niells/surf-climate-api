@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "start": "yarn build && node dist/src/index.js",
-    "start:dev": "ts-node-dev 'src/index.ts'",
+    "start:dev": "ts-node-dev 'src/index.ts' | pino-pretty -c",
     "lint": "eslint ./src ./test --ext .ts",
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*'",
@@ -26,7 +26,8 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
-    "mongoose": "^5.12.7"
+    "mongoose": "^5.12.7",
+    "pino": "^6.11.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -38,12 +39,14 @@
     "@types/mongoose": "^5.10.5",
     "@types/nock": "^11.1.0",
     "@types/node": "^14.14.9",
+    "@types/pino": "^6.3.8",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.8.1",
     "@typescript-eslint/parser": "^4.8.1",
     "eslint": "^7.14.0",
     "jest": "^26.6.3",
     "nock": "^13.0.11",
+    "pino-pretty": "^5.0.2",
     "prettier": "^2.2.1",
     "supertest": "^6.0.1",
     "ts-jest": "^26.4.4",
