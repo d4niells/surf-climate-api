@@ -6,7 +6,7 @@
       }
     },
     "logger": {
-      "enabled": "false"
+      "enabled": false
     }
   }
 }
