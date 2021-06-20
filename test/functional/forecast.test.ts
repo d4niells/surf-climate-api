@@ -1,6 +1,6 @@
 import nock from 'nock';
 
-import { Beach, BeachPosition } from '@src/models/beaches';
+import { Beach, BeachPosition } from '@src/models/beach';
 import { User } from '@src/models/user';
 
 import { Auth } from '@src/services/auth';

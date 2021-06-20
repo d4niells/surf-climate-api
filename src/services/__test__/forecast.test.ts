@@ -1,6 +1,6 @@
 import { Forecast } from '@src/services/forecast';
 import { StormGlass } from '@src/clients/stormGlass';
-import { Beach, BeachPosition } from '@src/models/beaches';
+import { Beach, BeachPosition } from '@src/models/beach';
 import { ForecastProcessingInternalError } from '@src/utils/errors/forecast-processing-internal-error';
 import StormGlassNormalizedResponseFixture from '@test/fixtures/stormglass_normalized_response_3_hours.json';
 
