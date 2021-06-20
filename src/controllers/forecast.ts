@@ -3,9 +3,9 @@ import { Controller, Get } from '@overnightjs/core';
 
 import { Beach } from '@src/models/beach';
 
-import { Forecast } from '@src/services/forecast';
+import { ForecastService } from '@src/services/forecast';
 
-const forecast = new Forecast();
+const forecast = new ForecastService();
 
 @Controller('forecast')
 export class ForecastController {

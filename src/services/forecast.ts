@@ -11,7 +11,7 @@ export interface TimeForecast {
 
 export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {}
 
-export class Forecast {
+export class ForecastService {
   constructor(protected stormGlass = new StormGlass()) {}
 
   public async processForecastForBeaches(

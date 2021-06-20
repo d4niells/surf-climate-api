@@ -1,4 +1,4 @@
-import { Forecast } from '@src/services/forecast';
+import { ForecastService } from '@src/services/forecast';
 import { StormGlass } from '@src/clients/stormGlass';
 import { Beach, BeachPosition } from '@src/models/beach';
 import { ForecastProcessingInternalError } from '@src/utils/errors/forecast-processing-internal-error';
@@ -86,14 +86,14 @@ describe('Forecast Service', () => {
       },
     ];
 
-    const forecast = new Forecast(mockedStormGlassService);
+    const forecast = new ForecastService(mockedStormGlassService);
     const beachesWithRating = await forecast.processForecastForBeaches(beaches);
 
     expect(beachesWithRating).toEqual(expectedResponse);
   });
 
   it('Should return an empty list when the beaches array is empty', async () => {
-    const forecast = new Forecast(mockedStormGlassService);
+    const forecast = new ForecastService(mockedStormGlassService);
     const response = await forecast.processForecastForBeaches([]);
 
     expect(response).toEqual([]);
@@ -113,7 +113,7 @@ describe('Forecast Service', () => {
       'Error fetching data'
     );
 
-    const forecast = new Forecast(mockedStormGlassService);
+    const forecast = new ForecastService(mockedStormGlassService);
     await expect(forecast.processForecastForBeaches(beaches)).rejects.toThrow(
       ForecastProcessingInternalError
     );
