@@ -1,6 +1,6 @@
-import { SetupServer } from './server';
 import config from 'config';
 
+import { SetupServer } from './server';
 import logger from './logger';
 
 enum ExitStatus {
@@ -8,7 +8,15 @@ enum ExitStatus {
   Success = 0,
 }
 
-// Self invocked function to start and exit app
+// Listen to unhandled rejection so as not to interrupt the process
+process.on('unhandledRejection', (reason, promise): NodeJS.Process => {
+  logger.error(
+    `App exiting due to an unhandled promise: ${promise} and reason: ${reason}`
+  );
+  throw reason;
+});
+
+// Self invocked function to start and exit the app correctly
 (async (): Promise<void> => {
   try {
     const server = new SetupServer(config.get('App.port'));
@@ -17,7 +25,7 @@ enum ExitStatus {
 
     const exitSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGQUIT'];
 
-    exitSignals.map((signal) =>
+    for (const signal of exitSignals) {
       process.on(signal, async () => {
         try {
           await server.close();
@@ -27,8 +35,8 @@ enum ExitStatus {
           logger.error(`App exited with error: ${error}`);
           process.exit(ExitStatus.Failure);
         }
-      })
-    );
+      });
+    }
   } catch (error) {
     logger.error(`App exited with error: ${error}`);
     process.exit(ExitStatus.Failure);
