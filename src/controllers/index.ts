@@ -3,6 +3,8 @@ import { Response } from 'express';
 
 import { CUSTOM_VALIDATION } from '@src/models/user';
 
+import logger from '@src/logger';
+
 interface Error {
   code: number;
   error: string;
@@ -16,6 +18,7 @@ export abstract class BaseController {
       const clientErrors = this.handleClientErros(error);
       response.status(clientErrors.code).send(clientErrors);
     } else {
+      logger.error(error);
       response.status(500).send({ code: 500, error: 'Something went wronng!' });
     }
   }
