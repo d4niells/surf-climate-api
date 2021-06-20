@@ -3,7 +3,7 @@ import nock from 'nock';
 import { Beach, BeachPosition } from '@src/models/beach';
 import { User } from '@src/models/user';
 
-import { Auth } from '@src/services/auth';
+import { AuthService } from '@src/services/auth';
 
 import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_hours.json';
 import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json';
@@ -34,7 +34,7 @@ describe('Beach forecast function tests', () => {
     const beach = new Beach(defaultBeach);
     await beach.save();
 
-    token = Auth.generateToken(user.toJSON());
+    token = AuthService.generateToken(user.toJSON());
   });
 
   it('Should return a forecast with just a few times', async () => {

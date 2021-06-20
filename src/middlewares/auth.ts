@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { Auth } from '@src/services/auth';
+import { AuthService } from '@src/services/auth';
 
 export const authMiddleware = (
   request: Partial<Request>,
@@ -9,7 +9,7 @@ export const authMiddleware = (
 ): void => {
   try {
     const token = request.headers?.['x-access-token'];
-    const decoded = Auth.decodeToken(token as string);
+    const decoded = AuthService.decodeToken(token as string);
 
     request.decoded = decoded;
     next();

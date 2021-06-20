@@ -1,5 +1,6 @@
 import { User } from '@src/models/user';
-import { Auth } from '@src/services/auth';
+
+import { AuthService } from '@src/services/auth';
 
 describe('Users function tests', () => {
   beforeEach(async () => await User.deleteMany({}));
@@ -14,7 +15,7 @@ describe('Users function tests', () => {
 
       const response = await global.testRequest.post('/users').send(newUser);
 
-      const passwordHasEncrypted = Auth.comparePasswords(
+      const passwordHasEncrypted = AuthService.comparePasswords(
         newUser.password,
         response.body.password
       );

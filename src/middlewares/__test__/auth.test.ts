@@ -1,9 +1,9 @@
-import { Auth } from '@src/services/auth';
+import { AuthService } from '@src/services/auth';
 import { authMiddleware } from '@src/middlewares/auth';
 
 describe('Auth middleware', () => {
   it('should verify a JWT token and call th next middleware', () => {
-    const jwtToken = Auth.generateToken({ data: 'fake' });
+    const jwtToken = AuthService.generateToken({ data: 'fake' });
 
     const requestFake = {
       headers: {

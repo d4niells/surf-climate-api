@@ -5,7 +5,7 @@ import { User } from '@src/models/user';
 
 import { BaseController } from '@src/controllers';
 
-import { Auth } from '@src/services/auth';
+import { AuthService } from '@src/services/auth';
 
 @Controller('users')
 export class UsersController extends BaseController {
@@ -32,13 +32,16 @@ export class UsersController extends BaseController {
     if (!user)
       return response.status(401).send({ code: 401, error: 'User not found!' });
 
-    const validPassword = await Auth.comparePasswords(password, user.password);
+    const validPassword = await AuthService.comparePasswords(
+      password,
+      user.password
+    );
     if (!validPassword)
       return response
         .status(401)
         .send({ code: 401, error: 'Password does not match!' });
 
-    const token = Auth.generateToken(user.toJSON());
+    const token = AuthService.generateToken(user.toJSON());
 
     return response.status(200).send({ token: token });
   }

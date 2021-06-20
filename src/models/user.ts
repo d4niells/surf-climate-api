@@ -1,6 +1,6 @@
 import mongoose, { Document, Model } from 'mongoose';
 
-import { Auth } from '@src/services/auth';
+import { AuthService } from '@src/services/auth';
 
 export enum CUSTOM_VALIDATION {
   DUPLICATED = 'DUPLICATED',
@@ -50,7 +50,7 @@ schema.pre<UserModel>('save', async function (): Promise<void> {
   }
 
   try {
-    const hashedPassword = await Auth.hashPassword(this.password);
+    const hashedPassword = await AuthService.hashPassword(this.password);
     this.password = hashedPassword;
   } catch (error) {
     console.error(`Error hashing the password for the user ${this.name}`);

@@ -1,6 +1,6 @@
 import { Beach } from '@src/models/beach';
 import { User } from '@src/models/user';
-import { Auth } from '@src/services/auth';
+import { AuthService } from '@src/services/auth';
 
 describe('Beaches functional tests', () => {
   let token: string;
@@ -16,7 +16,7 @@ describe('Beaches functional tests', () => {
     await User.deleteMany();
 
     const user = await new User(defaultUser).save();
-    token = Auth.generateToken(user.toJSON());
+    token = AuthService.generateToken(user.toJSON());
   });
 
   describe('When creating a new beach', () => {
