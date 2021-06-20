@@ -3,10 +3,13 @@ import './utils/module-alias';
 import express, { Application } from 'express';
 import { Server } from '@overnightjs/core';
 import config from 'config';
+
+import * as database from '@src/database';
+import logger from '@src/logger';
+
 import { ForecastController } from '@src/controllers/forecast';
 import { BeachesController } from '@src/controllers/beaches';
-import * as database from '@src/database';
-import { UsersController } from './controllers/users';
+import { UsersController } from '@src/controllers/users';
 
 export class SetupServer extends Server {
   constructor(private port: number = config.get('App.port')) {
@@ -42,7 +45,7 @@ export class SetupServer extends Server {
 
   public start(): void {
     this.app.listen(this.port, () => {
-      console.info('Server listening of port: ', this.port);
+      logger.info('Server listening of port: ' + this.port);
     });
   }
 
