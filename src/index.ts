@@ -16,6 +16,12 @@ process.on('unhandledRejection', (reason, promise): NodeJS.Process => {
   throw reason;
 });
 
+// Listen for uncaught exception to exit the application
+process.on('uncaughtException', (error): NodeJS.Process => {
+  logger.error(`App exiting due to an uncaught exception: ${error}`);
+  process.exit(ExitStatus.Success);
+});
+
 // Self invocked function to start and exit the app correctly
 (async (): Promise<void> => {
   try {
