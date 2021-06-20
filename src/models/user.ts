@@ -1,5 +1,7 @@
 import mongoose, { Document, Model } from 'mongoose';
+
 import { Auth } from '@src/services/auth';
+
 export enum CUSTOM_VALIDATION {
   DUPLICATED = 'DUPLICATED',
 }

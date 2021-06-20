@@ -1,7 +1,10 @@
-import { Controller, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
+import { Controller, Post } from '@overnightjs/core';
+
 import { User } from '@src/models/user';
+
 import { BaseController } from '@src/controllers';
+
 import { Auth } from '@src/services/auth';
 
 @Controller('users')

@@ -1,5 +1,7 @@
 import { Beach } from '@src/models/beach';
+
 import { ForecastPoint, StormGlass } from '@src/clients/stormGlass';
+
 import { ForecastProcessingInternalError } from '@src/utils/errors/forecast-processing-internal-error';
 
 export interface TimeForecast {

@@ -1,5 +1,6 @@
-import { Response } from 'express';
 import mongoose from 'mongoose';
+import { Response } from 'express';
+
 import { CUSTOM_VALIDATION } from '@src/models/user';
 
 interface Error {
