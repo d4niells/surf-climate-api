@@ -2,6 +2,7 @@ import './utils/module-alias';
 
 import express, { Application } from 'express';
 import { Server } from '@overnightjs/core';
+import expressPino from 'express-pino-logger';
 import config from 'config';
 
 import * as database from '@src/database';
@@ -25,6 +26,7 @@ export class SetupServer extends Server {
   private setupExpress(): void {
     this.app.use(express.json());
     this.setupControllers();
+    this.app.use(expressPino({ logger }));
   }
 
   private setupControllers(): void {
