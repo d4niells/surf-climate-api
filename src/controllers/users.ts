@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { Controller, Post } from '@overnightjs/core';
 
 import { User } from '@src/models/user';
@@ -14,7 +15,7 @@ export class UsersController extends BaseController {
     try {
       const user = new User(request.body);
       const newUser = await user.save();
-      response.status(201).send(newUser);
+      response.status(StatusCodes.CREATED).send(newUser);
     } catch (error) {
       this.sendCreateUpdateErrorResponse(response, error);
     }
@@ -29,20 +30,27 @@ export class UsersController extends BaseController {
 
     const user = await User.findOne({ email: email });
 
-    if (!user)
-      return response.status(401).send({ code: 401, error: 'User not found!' });
+    if (!user) {
+      return this.sendErrorResponse(response, {
+        code: StatusCodes.UNAUTHORIZED,
+        message: 'User not found!',
+      });
+    }
 
     const validPassword = await AuthService.comparePasswords(
       password,
       user.password
     );
-    if (!validPassword)
-      return response
-        .status(401)
-        .send({ code: 401, error: 'Password does not match!' });
+
+    if (!validPassword) {
+      return this.sendErrorResponse(response, {
+        code: StatusCodes.UNAUTHORIZED,
+        message: 'Password does not match!',
+      });
+    }
 
     const token = AuthService.generateToken(user.toJSON());
 
-    return response.status(200).send({ token: token });
+    return response.status(StatusCodes.OK).send({ token: token });
   }
 }
