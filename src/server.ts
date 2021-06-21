@@ -1,8 +1,10 @@
 import './utils/module-alias';
 
 import express, { Application } from 'express';
-import { Server } from '@overnightjs/core';
 import expressPino from 'express-pino-logger';
+import { Server } from '@overnightjs/core';
+import cors from 'cors';
+
 import config from 'config';
 
 import * as database from '@src/database';
@@ -27,6 +29,7 @@ export class SetupServer extends Server {
     this.app.use(express.json());
     this.setupControllers();
     this.app.use(expressPino({ logger }));
+    this.app.use(cors({ origin: '*' }));
   }
 
   private setupControllers(): void {
