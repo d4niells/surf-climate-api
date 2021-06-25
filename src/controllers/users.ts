@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { Controller, Post } from '@overnightjs/core';
+import { Controller, Post, Get, Middleware } from '@overnightjs/core';
 
 import { User } from '@src/models/user';
 
 import { BaseController } from '@src/controllers';
 
 import { AuthService } from '@src/services/auth';
+
+import { authMiddleware } from '@src/middlewares/auth';
 
 @Controller('users')
 export class UsersController extends BaseController {
@@ -52,5 +54,21 @@ export class UsersController extends BaseController {
     const token = AuthService.generateToken(user.toJSON());
 
     return response.status(StatusCodes.OK).send({ token: token });
+  }
+
+  @Get('me')
+  @Middleware(authMiddleware)
+  public async me(request: Request, response: Response): Promise<Response> {
+    const email = request.decoded?.email;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return this.sendErrorResponse(response, {
+        code: StatusCodes.NOT_FOUND,
+        message: 'User not found!',
+      });
+    }
+
+    return response.status(StatusCodes.OK).send({ user });
   }
 }
