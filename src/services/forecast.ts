@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { Beach } from '@src/models/beach';
 
 import { ForecastPoint, StormGlass } from '@src/clients/stormGlass';
@@ -26,25 +28,41 @@ export class ForecastService {
   public async processForecastForBeaches(
     beaches: Beach[]
   ): Promise<TimeForecast[]> {
-    logger.info(`Preparing the forecast for ${beaches.length} beaches`);
-
     try {
-      const pointsWithCorrectSource: BeachForecast[] = [];
+      const beachForecast = await this.calculateRating(beaches);
+      const timeForecasts = this.mapForecastByTime(beachForecast);
+      const orderedTimeForecasts =
+        this.orderTimeForecastsByRating(timeForecasts);
 
-      for (const beach of beaches) {
-        const rating = new this.RatingService(beach);
-        const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
-
-        const enrichedBeachData = this.enrichedBeachData(points, beach, rating);
-
-        pointsWithCorrectSource.push(...enrichedBeachData);
-      }
-
-      return this.mapForecastByTime(pointsWithCorrectSource);
+      return orderedTimeForecasts;
     } catch (error) {
       logger.error(error);
       throw new ForecastProcessingInternalError(error.message);
     }
+  }
+
+  private orderTimeForecastsByRating(timeForecasts: TimeForecast[]) {
+    return timeForecasts.map((timeForecast) => ({
+      time: timeForecast.time,
+      forecast: _.orderBy(timeForecast.forecast, ['rating'], ['desc']),
+    }));
+  }
+
+  private async calculateRating(beaches: Beach[]): Promise<BeachForecast[]> {
+    logger.info(`Preparing the forecast for ${beaches.length} beaches`);
+
+    const pointsWithCorrectSource: BeachForecast[] = [];
+
+    for (const beach of beaches) {
+      const rating = new this.RatingService(beach);
+      const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
+
+      const enrichedBeachData = this.enrichedBeachData(points, beach, rating);
+
+      pointsWithCorrectSource.push(...enrichedBeachData);
+    }
+
+    return pointsWithCorrectSource;
   }
 
   private enrichedBeachData(
