@@ -14,7 +14,7 @@
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*'",
     "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*'",
-    "test": "yarn test:unit && yarn test:functional",
+    "test": "yarn lint && yarn style:check && yarn test:unit && yarn test:functional",
     "test:functional": "jest --projects ./test --runInBand",
     "test:unit": "jest"
   },
