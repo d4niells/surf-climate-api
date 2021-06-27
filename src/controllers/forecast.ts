@@ -1,8 +1,14 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { ClassMiddleware, Controller, Get } from '@overnightjs/core';
+import {
+  ClassMiddleware,
+  Controller,
+  Get,
+  Middleware,
+} from '@overnightjs/core';
 
 import { authMiddleware } from '@src/middlewares/auth';
+import { rateLimiter } from '@src/middlewares/rate-limiter';
 
 import { Beach } from '@src/models/beach';
 
@@ -18,6 +24,7 @@ const forecast = new ForecastService();
 @ClassMiddleware(authMiddleware)
 export class ForecastController extends BaseController {
   @Get('')
+  @Middleware(rateLimiter)
   public async getForecastForLoggedUser(
     request: Request,
     response: Response
