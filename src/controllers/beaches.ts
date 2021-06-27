@@ -15,7 +15,7 @@ export class BeachesController extends BaseController {
   @Post('')
   public async create(request: Request, response: Response): Promise<void> {
     try {
-      const beach = new Beach({ ...request.body, user: request.decoded?.id });
+      const beach = new Beach({ ...request.body, userId: request.decoded?.id });
       const result = await beach.save();
       response.status(201).send(result);
     } catch (error) {

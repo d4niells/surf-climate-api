@@ -13,18 +13,18 @@ export interface Beach {
   position: GeoPosition;
   lat: number;
   lng: number;
-  user: string;
+  userId: string;
 }
 
 export interface BeachModel extends Omit<Beach, '_id'>, Document {}
 
-const schema = new mongoose.Schema(
+const schema = new mongoose.Schema<Beach>(
   {
     lat: { type: Number, required: true },
     lng: { type: Number, required: true },
     name: { type: String, required: true },
     position: { type: String, required: true },
-    user: { type: Schema.Types.ObjectId, ref: 'user', required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'user', required: true },
   },
   {
     toJSON: {

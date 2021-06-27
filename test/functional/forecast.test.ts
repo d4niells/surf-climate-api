@@ -23,12 +23,12 @@ describe('Beach forecast function tests', () => {
 
     const user = await new User(defaultUser).save();
 
-    const defaultBeach = {
+    const defaultBeach: Beach = {
       lat: -33.792726,
       lng: 151.289824,
       name: 'Manly',
-      user: user.id,
       position: GeoPosition.EAST,
+      userId: user.id,
     };
 
     const beach = new Beach(defaultBeach);

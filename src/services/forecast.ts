@@ -15,7 +15,7 @@ export interface TimeForecast {
   forecast: BeachForecast[];
 }
 
-export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {}
+export interface BeachForecast extends Omit<Beach, 'userId'>, ForecastPoint {}
 
 type RatingService = typeof Rating;
 
