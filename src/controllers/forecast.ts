@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { ClassMiddleware, Controller, Get } from '@overnightjs/core';
 
-import { Controller, Get } from '@overnightjs/core';
+import { authMiddleware } from '@src/middlewares/auth';
 
 import { Beach } from '@src/models/beach';
 
@@ -14,16 +15,18 @@ import { BaseController } from '.';
 const forecast = new ForecastService();
 
 @Controller('forecast')
+@ClassMiddleware(authMiddleware)
 export class ForecastController extends BaseController {
   @Get('')
   public async getForecastForLoggedUser(
-    _: Request,
+    request: Request,
     response: Response
   ): Promise<void> {
     try {
-      const beaches = await Beach.find({});
+      const beaches = await Beach.find({ user: request.decoded?.id });
       const forecastData = await forecast.processForecastForBeaches(beaches);
-      response.status(200).send(forecastData);
+
+      response.status(StatusCodes.OK).send(forecastData);
     } catch (error) {
       logger.error(error);
       this.sendErrorResponse(response, {
