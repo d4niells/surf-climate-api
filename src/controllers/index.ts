@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Response } from 'express';
-import httpStatusCodes from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 
 import { CUSTOM_VALIDATION } from '@src/models/user';
 
@@ -26,9 +26,9 @@ export abstract class BaseController {
       );
     } else {
       logger.error(error);
-      response.status(httpStatusCodes.INTERNAL_SERVER_ERROR).send(
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).send(
         ApiError.format({
-          code: httpStatusCodes.INTERNAL_SERVER_ERROR,
+          code: StatusCodes.INTERNAL_SERVER_ERROR,
           message: 'Something went wronng!',
         })
       );
@@ -48,8 +48,8 @@ export abstract class BaseController {
     );
 
     if (duplicatedKindErrors.length) {
-      return { code: 409, error: error.message };
+      return { code: StatusCodes.CONFLICT, error: error.message };
     }
-    return { code: 422, error: error.message };
+    return { code: StatusCodes.BAD_REQUEST, error: error.message };
   }
 }

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import httpStatusCodes from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
+
 import { Controller, Get } from '@overnightjs/core';
 
 import { Beach } from '@src/models/beach';
@@ -7,6 +8,7 @@ import { Beach } from '@src/models/beach';
 import { ForecastService } from '@src/services/forecast';
 
 import logger from '@src/logger';
+
 import { BaseController } from '.';
 
 const forecast = new ForecastService();
@@ -25,7 +27,7 @@ export class ForecastController extends BaseController {
     } catch (error) {
       logger.error(error);
       this.sendErrorResponse(response, {
-        code: httpStatusCodes.INTERNAL_SERVER_ERROR,
+        code: StatusCodes.INTERNAL_SERVER_ERROR,
         message: 'Something went wrong',
       });
     }
