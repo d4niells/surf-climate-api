@@ -11,14 +11,14 @@ import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
 
 import config from 'config';
 
-import * as database from '@src/database';
-import logger from '@src/logger';
-
 import { ForecastController } from '@src/controllers/forecast';
 import { BeachesController } from '@src/controllers/beaches';
 import { UsersController } from '@src/controllers/users';
 
+import logger from '@src/logger';
+import * as database from '@src/database';
 import apiScheme from '@src/api.schema.json';
+import { apiErrorValidator } from '@src/middlewares/api-error-validator';
 
 export class SetupServer extends Server {
   constructor(private port: number = config.get('App.port')) {
@@ -26,16 +26,30 @@ export class SetupServer extends Server {
   }
 
   public async init(): Promise<void> {
+    // initialaze setup express
     this.setupExpress();
+
+    // initialize documentation setup with swagger
     await this.docsSetup();
+
+    // initialize setup controllers
     this.setupControllers();
+
+    // initialize database setup with mongodb
     await this.databaseSetup();
+
+    // initialize setup error handlers
+    this.setupErrorHandlers();
   }
 
   private setupExpress(): void {
     this.app.use(express.json());
     this.app.use(expressPino({ logger }));
     this.app.use(cors({ origin: '*' }));
+  }
+
+  private setupErrorHandlers(): void {
+    this.app.use(apiErrorValidator);
   }
 
   private setupControllers(): void {
