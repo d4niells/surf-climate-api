@@ -31,11 +31,11 @@ process.on('uncaughtException', (error): NodeJS.Process => {
 
     const exitSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGQUIT'];
 
-    for (const signal of exitSignals) {
-      process.on(signal, async () => {
+    for (const exitSignal of exitSignals) {
+      process.on(exitSignal, async () => {
         try {
           await server.close();
-          logger.info(`App exited with sucess. Signal: ${signal}`);
+          logger.info(`App exited with sucess. exit signal: ${exitSignal}`);
           process.exit(ExitStatus.Success);
         } catch (error) {
           logger.error(`App exited with error: ${error}`);
