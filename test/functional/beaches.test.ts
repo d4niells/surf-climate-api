@@ -20,7 +20,7 @@ describe('Beaches functional tests', () => {
   });
 
   describe('When creating a new beach', () => {
-    it('Should create a beach with success', async () => {
+    it('should create a beach with success', async () => {
       const newBeach = {
         lat: -33.792726,
         lng: 151.289824,
@@ -37,28 +37,7 @@ describe('Beaches functional tests', () => {
       expect(response.body).toEqual(expect.objectContaining(newBeach));
     });
 
-    // it('Should return status 400 when is a validation error', async () => {
-    //   const newBeach = {
-    //     lat: 'invalid_string',
-    //     lng: 151.289824,
-    //     name: 'Manly',
-    //     position: 'E',
-    //   };
-
-    //   const response = await global.testRequest
-    //     .post('/beaches')
-    //     .set({ 'x-access-token': token })
-    //     .send(newBeach);
-
-    //   expect(response.status).toBe(400);
-    //   expect(response.body).toEqual({
-    //     code: 400,
-    //     error: 'Bad Request',
-    //     message: 'request.body.lat should be number',
-    //   });
-    // });
-
-    it('should return validation error when a field is invalid', async () => {
+    it('should return status 400 when is a validation error when a field is invalid', async () => {
       const newBeach = {
         lat: 'invalid_string',
         lng: 151.289824,
@@ -71,7 +50,6 @@ describe('Beaches functional tests', () => {
         .set({ 'x-access-token': token })
         .send(newBeach);
 
-      //tests will be broken, not middleware
       expect(response.status).toBe(400);
       expect(response.body).toEqual({
         code: 400,
@@ -80,7 +58,7 @@ describe('Beaches functional tests', () => {
       });
     });
 
-    it.skip('Should return status 500 when there is any error than validation error', async () => {
+    it.skip('should return status 500 when there is any error than validation error', async () => {
       // validate status 500 (Internal Server Error)
     });
   });
