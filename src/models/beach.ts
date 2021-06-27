@@ -1,16 +1,16 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-export enum BeachPosition {
-  north = 'N',
-  south = 'S',
-  east = 'E',
-  west = 'W',
+export enum GeoPosition {
+  NORTH = 'N',
+  SOUTH = 'S',
+  EAST = 'E',
+  WEST = 'W',
 }
 
 export interface Beach {
   _id?: string;
   name: string;
-  position: BeachPosition;
+  position: GeoPosition;
   lat: number;
   lng: number;
   user: string;
