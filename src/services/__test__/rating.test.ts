@@ -14,7 +14,87 @@ describe('Rating Service', () => {
   const defaultRating = new Rating(defaultBeach);
 
   describe('Calculate rating for a given point', () => {
-    // TODO
+    const defaultPoint: ForecastPoint = {
+      swellDirection: 110,
+      swellHeight: 0.1,
+      swellPeriod: 5,
+      time: 'test',
+      waveDirection: 110,
+      waveHeight: 0.1,
+      windDirection: 100,
+      windSpeed: 100,
+    };
+
+    it('should get a reating less than 1 for a poor point', () => {
+      const rating = defaultRating.getRateForPoint(defaultPoint);
+      expect(rating).toBe(1);
+    });
+
+    it('should get a rating of 1 for and ok point', () => {
+      const point: ForecastPoint = { ...defaultPoint, swellHeight: 0.4 };
+
+      const rating = defaultRating.getRateForPoint(point);
+      expect(rating).toBe(1);
+    });
+
+    it('should get arating of 3 for a point with offshore winds and a half overhead height', () => {
+      const point: ForecastPoint = {
+        ...defaultPoint,
+        swellHeight: 0.7,
+        windDirection: 250,
+      };
+
+      const rating = defaultRating.getRateForPoint(point);
+      expect(rating).toBe(3);
+    });
+
+    it('should get a rating of 4 for a point with offshore winds, half overhead high swell and good interval', () => {
+      const point: ForecastPoint = {
+        ...defaultPoint,
+        swellHeight: 0.7,
+        swellPeriod: 12,
+        windDirection: 250,
+      };
+
+      const rating = defaultRating.getRateForPoint(point);
+      expect(rating).toBe(4);
+    });
+
+    it('should get a rating of 4 for a point with offshore winds, shoulder high swell and good interval', () => {
+      const point: ForecastPoint = {
+        ...defaultPoint,
+        swellHeight: 1.5,
+        swellPeriod: 12,
+        windDirection: 250,
+      };
+
+      const rating = defaultRating.getRateForPoint(point);
+      expect(rating).toBe(4);
+    });
+
+    it('should get a rating of 5 classic day!', () => {
+      const point: ForecastPoint = {
+        ...defaultPoint,
+        swellHeight: 2.5,
+        swellPeriod: 16,
+        windDirection: 250,
+      };
+
+      const rating = defaultRating.getRateForPoint(point);
+      expect(rating).toBe(5);
+    });
+
+    it('should get a rating of 4 a good condition but with crossshore winds', () => {
+      const point: ForecastPoint = {
+        ...defaultPoint,
+        swellHeight: 2.5,
+        swellPeriod: 16,
+        windDirection: 130,
+      };
+
+      const rating = defaultRating.getRateForPoint(point);
+      expect(rating).toBe(4);
+    });
   });
 
   describe('Get rating based on wind and positions', () => {

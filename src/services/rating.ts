@@ -1,4 +1,5 @@
-import { BeachPosition, Beach } from '@src/models/beach';
+import { ForecastPoint } from '@src/clients/stormGlass';
+import { GeoPosition, Beach } from '@src/models/beach';
 
 const waveHeights = {
   ankleToKnee: {
@@ -17,9 +18,27 @@ const waveHeights = {
 export class Rating {
   constructor(private beach: Beach) {}
 
+  public getRateForPoint(point: ForecastPoint): number {
+    const swellDirection = this.getPositionFromLocation(point.swellDirection);
+    const windDirection = this.getPositionFromLocation(point.windDirection);
+
+    const windAndWaveRating = this.getRatingBasedOnWindAndWavePositions(
+      swellDirection,
+      windDirection
+    );
+
+    const swellHeightRating = this.getRatingForSwellSize(point.swellHeight);
+    const swellPeridRating = this.getRatingForSwellPeriod(point.swellPeriod);
+
+    const totalRating =
+      (windAndWaveRating + swellHeightRating + swellPeridRating) / 3;
+
+    return Math.round(totalRating);
+  }
+
   public getRatingBasedOnWindAndWavePositions(
-    wavePosition: BeachPosition,
-    windPosition: BeachPosition
+    wavePosition: GeoPosition,
+    windPosition: GeoPosition
   ): number {
     if (wavePosition === windPosition) return 1;
 
@@ -66,24 +85,24 @@ export class Rating {
     return 1;
   }
 
-  public getPositionFromLocation(coordinates: number): BeachPosition {
+  public getPositionFromLocation(coordinates: number): GeoPosition {
     if (coordinates >= 310 || (coordinates < 50 && coordinates >= 0)) {
-      return BeachPosition.north;
+      return GeoPosition.NORTH;
     }
 
     if (coordinates >= 50 && coordinates < 120) {
-      return BeachPosition.east;
+      return GeoPosition.EAST;
     }
 
     if (coordinates >= 120 && coordinates < 220) {
-      return BeachPosition.south;
+      return GeoPosition.SOUTH;
     }
 
     if (coordinates >= 220 && coordinates < 310) {
-      return BeachPosition.west;
+      return GeoPosition.WEST;
     }
 
-    return BeachPosition.east;
+    return GeoPosition.EAST;
   }
 
   private isWindOffShore(
@@ -91,18 +110,18 @@ export class Rating {
     windDirection: string
   ): boolean {
     return (
-      (waveDirection === BeachPosition.north &&
-        windDirection === BeachPosition.south &&
-        this.beach.position === BeachPosition.north) ||
-      (waveDirection === BeachPosition.south &&
-        windDirection === BeachPosition.north &&
-        this.beach.position === BeachPosition.south) ||
-      (waveDirection === BeachPosition.east &&
-        windDirection === BeachPosition.west &&
-        this.beach.position === BeachPosition.east) ||
-      (waveDirection === BeachPosition.west &&
-        windDirection === BeachPosition.east &&
-        this.beach.position === BeachPosition.west)
+      (waveDirection === GeoPosition.NORTH &&
+        windDirection === GeoPosition.SOUTH &&
+        this.beach.position === GeoPosition.NORTH) ||
+      (waveDirection === GeoPosition.SOUTH &&
+        windDirection === GeoPosition.NORTH &&
+        this.beach.position === GeoPosition.SOUTH) ||
+      (waveDirection === GeoPosition.EAST &&
+        windDirection === GeoPosition.WEST &&
+        this.beach.position === GeoPosition.EAST) ||
+      (waveDirection === GeoPosition.WEST &&
+        windDirection === GeoPosition.EAST &&
+        this.beach.position === GeoPosition.WEST)
     );
   }
 }
