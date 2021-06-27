@@ -2,6 +2,8 @@ import { Beach } from '@src/models/beach';
 
 import { ForecastPoint, StormGlass } from '@src/clients/stormGlass';
 
+import { Rating } from '@src/services/rating';
+
 import { ForecastProcessingInternalError } from '@src/utils/errors/forecast-processing-internal-error';
 
 import logger from '@src/logger';
@@ -13,8 +15,13 @@ export interface TimeForecast {
 
 export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {}
 
+type RatingService = typeof Rating;
+
 export class ForecastService {
-  constructor(protected stormGlass = new StormGlass()) {}
+  constructor(
+    protected stormGlass = new StormGlass(),
+    protected RatingService: RatingService = Rating
+  ) {}
 
   public async processForecastForBeaches(
     beaches: Beach[]
@@ -25,9 +32,10 @@ export class ForecastService {
       const pointsWithCorrectSource: BeachForecast[] = [];
 
       for (const beach of beaches) {
+        const rating = new this.RatingService(beach);
         const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
 
-        const enrichedBeachData = this.enrichedBeachData(points, beach);
+        const enrichedBeachData = this.enrichedBeachData(points, beach, rating);
 
         pointsWithCorrectSource.push(...enrichedBeachData);
       }
@@ -41,7 +49,8 @@ export class ForecastService {
 
   private enrichedBeachData(
     points: ForecastPoint[],
-    beach: Beach
+    beach: Beach,
+    rating: Rating
   ): BeachForecast[] {
     const { lat, lng, name, position } = beach;
 
@@ -51,7 +60,7 @@ export class ForecastService {
       lng,
       name,
       position,
-      rating: 1,
+      rating: rating.getRateForPoint(point),
     }));
   }
 
