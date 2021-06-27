@@ -52,6 +52,7 @@ describe('Beach forecast function tests', () => {
         source: 'noaa',
         lat: '-33.792726',
         lng: '151.289824',
+        end: /(.*)/,
       })
       .reply(200, stormGlassWeather3HoursFixture);
 
@@ -75,6 +76,7 @@ describe('Beach forecast function tests', () => {
       .query({
         lat: '-33.792726',
         lng: '151.289824',
+        end: /(.*)/,
       })
       .replyWithError('Something ent wrong');
 
