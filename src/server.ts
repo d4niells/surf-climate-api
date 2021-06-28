@@ -1,27 +1,42 @@
 import './utils/module-alias';
 
+// import express, { Application } from 'express';
+// import expressPino from 'express-pino-logger';
+// import { Server } from '@overnightjs/core';
+// import swaggerUI from 'swagger-ui-express';
+// import cors from 'cors';
+
+// import { OpenApiValidator } from 'express-openapi-validator';
+// import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
+
+// import config from 'config';
+
+// import { ForecastController } from '@src/controllers/forecast';
+// import { BeachesController } from '@src/controllers/beaches';
+// import { UsersController } from '@src/controllers/users';
+
+// import logger from '@src/logger';
+// import * as database from '@src/database';
+// import apiScheme from '@src/api.schema.json';
+// import { apiErrorValidator } from '@src/middlewares/api-error-validator';
+
+import { Server } from '@overnightjs/core';
 import express, { Application } from 'express';
 import expressPino from 'express-pino-logger';
-import { Server } from '@overnightjs/core';
-import swaggerUI from 'swagger-ui-express';
 import cors from 'cors';
-
+import swaggerUI from 'swagger-ui-express';
 import { OpenApiValidator } from 'express-openapi-validator';
 import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
-
-import config from 'config';
-
-import { ForecastController } from '@src/controllers/forecast';
-import { BeachesController } from '@src/controllers/beaches';
-import { UsersController } from '@src/controllers/users';
-
-import logger from '@src/logger';
+import { ForecastController } from './controllers/forecast';
 import * as database from '@src/database';
-import apiScheme from '@src/api.schema.json';
-import { apiErrorValidator } from '@src/middlewares/api-error-validator';
+import { BeachesController } from './controllers/beaches';
+import { UsersController } from './controllers/users';
+import logger from './logger';
+import apiSchema from './api-schema.json';
+import { apiErrorValidator } from './middlewares/api-error-validator';
 
 export class SetupServer extends Server {
-  constructor(private port: number = config.get('App.port')) {
+  constructor(private port: number = 3000) {
     super();
   }
 
@@ -65,10 +80,10 @@ export class SetupServer extends Server {
   }
 
   private async docsSetup(): Promise<void> {
-    this.app.use('/docs', swaggerUI.serve, swaggerUI.setup(apiScheme));
+    this.app.use('/docs', swaggerUI.serve, swaggerUI.setup(apiSchema));
 
     await new OpenApiValidator({
-      apiSpec: apiScheme as OpenAPIV3.Document,
+      apiSpec: apiSchema as OpenAPIV3.Document,
       validateRequests: true,
       validateResponses: true,
     }).install(this.app);
