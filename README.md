@@ -5,14 +5,14 @@ Api provides climatic data for all beaches in the world, you can know in real ti
 ## Documentation
 
 Feel free to integrate with my API, read the documentation for more information.
-[Documentation](https://linktodocumentation)
+[Documentation](https://surf-climate.herokuapp.com/docs)
 
 ## API Reference
 
 #### Base endpoint
 
 ```http
-  BASE ENDPOINT https://surf-climate.herokuapp.com/
+  ENDPOINT https://surf-climate.herokuapp.com/
 ```
 
 ## Tech Stack
