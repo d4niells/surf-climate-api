@@ -51,6 +51,13 @@ Start the server
   yarn start:dev
 ```
 
+## Course
+
+
+This API was developed in the Nodejs course of zero production with [@waldemarnt](https://github.com/waldemarnt).
+
+- In the course, we use TDD with Jest, Jest Mock, Integration tests, unit tests, adding logs in the application, applying the concept of data cache with the node-cache, documenting the API with Swagger/OpenAPI, API deployment in Heroku, using GitHub workflows to make the CI. [Course here!](https://youtube.com/playlist?list=PLz_YTBuxtxt6_Zf1h-qzNsvVt46H8ziKh)
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
