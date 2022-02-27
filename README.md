@@ -9,11 +9,11 @@ Feel free to integrate with my API, read the documentation for more information.
 
 ## API Reference
 
-#### Base endpoint
+#### Base URL
 
-```http
-  ENDPOINT https://surf-climate.herokuapp.com/
-```
+`
+  https://surf-climate.herokuapp.com/
+`
 
 ## Tech Stack
 
