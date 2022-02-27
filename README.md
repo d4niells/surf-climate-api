@@ -2,6 +2,8 @@
 
 Api provides climatic data for all beaches in the world, you can know in real time if this beach is good for surfing.
 
+Feel free to integrate with your app, remembering that it has a rate limit of 50 requests per day.
+
 ## Documentation
 
 Feel free to integrate with my API, read the documentation for more information.
